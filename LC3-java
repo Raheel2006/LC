@@ -1,0 +1,54 @@
+//thought about sliding window initially
+
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int[] arr = new int[256];
+        int l = 0;
+        int r = 0;
+        int max = 0;
+        if(s.length() == 0){
+            return 0;
+        }
+        while(r < s.length()){                      //NOTE : do not mess up moving left pointer by putting '>1' in if condition
+            if(arr[s.charAt(r)] >= 1){              //if frequency of character > 1 then move left pointer towards end until
+                while(arr[s.charAt(r)] >= 1){      //the frequency of that character goes back to 0
+                    arr[s.charAt(l)] -=1;
+                    l++;
+                }
+            }
+            if(r-l+1 > max){
+                max = r-l+1;
+            }
+            arr[s.charAt(r)] += 1;
+            r++;
+        }
+        return max;
+    }
+}
+
+//faster solution
+
+import java.util.Arrays;
+
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int[] arr = new int[256];
+        Arrays.fill(arr,-1);
+        int l = 0;
+        int max = 0;
+        if(s.length() == 0){
+            return 0;
+        }
+        for(int r = 0;r<s.length();r++){
+            if(arr[s.charAt(r)] >= l){
+                l = arr[s.charAt(r)]+1;    //update l to the postion ahead of the repeating character
+            }
+            arr[s.charAt(r)] = r;        //stores the last known postion of that character
+            if(r-l+1 > max){
+                max = r-l+1;
+            }
+        }
+        return max;
+    }
+        
+}
