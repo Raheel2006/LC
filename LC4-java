@@ -1,0 +1,67 @@
+//tried to implement neetcode solution
+//we assume the merged array to be divided into 2 parts; part1 is left of median and part2 is to the right of median
+//we derive part 1 from some left subarray of both the small and large array
+//we derive part 2 from some right subarray of both the small and large array
+
+class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int[] small;
+        int[] big;
+        int total = nums1.length + nums2.length;
+        if(nums1.length < nums2.length){
+            small = nums1;
+            big = nums2;
+        }
+        else{
+            small = nums2;
+            big = nums1;
+        }
+        int left = 0;
+        int right = small.length - 1;
+        while(true){
+            int smmid = Math.floorDiv(left + right, 2);
+            int bigmid = total/2 - smmid -2;
+            double bigr = 0;                                //element just right of highest element of left partitioned part of array big
+            double smallr = 0;                              //element just right of highest element of left partitioned part of array small
+            double bigl = 0;                                //element at mid of left partitioned part of array big
+            double smalll = 0;
+            if(bigmid+1 >= big.length){
+                bigr = Double.POSITIVE_INFINITY;
+            }else{
+                bigr = big[bigmid+1];
+            }
+            if(smmid+1 >= small.length){
+                smallr = Double.POSITIVE_INFINITY;
+            }else{
+                smallr = small[smmid+1];
+            }
+            if(smmid<0){
+                smalll = Double.NEGATIVE_INFINITY;
+            }else{
+                smalll = small[smmid];
+            }
+            if(bigmid<0){
+                bigl = Double.NEGATIVE_INFINITY;
+            }else{
+                bigl = big[bigmid];
+            }                                                    //we compare bigl and smalll with the smallr and bigr to check whether they satisy conditions or not
+            if(smalll <= bigr && bigl <= smallr){                //if one of the values is +or- infinity Math.max or min returns the other value
+                if(total%2==0){                                  //in even case we take average of middle 2 elements
+                    double a = Math.max(smalll, bigl);           //one of the element is the largest part of the left partitioned array of the combined arrays
+                    double b = Math.min(smallr, bigr);          //one of the element is the smallest part of the right partitioned array of the combined arrays
+                    return (a+b)/2;                              //returns the avg
+                }
+                else{
+                    return Math.min(smallr, bigr);
+                }
+            }
+            if(smalll>bigr){                                  //we took more elements from small than reqd
+                right = smmid-1;
+            }
+            if(bigl > smallr){                                //we took more elements from bigl than reqd
+                left = smmid+1;
+            }
+        }
+
+    }
+}
