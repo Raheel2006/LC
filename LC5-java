@@ -1,0 +1,34 @@
+//start from center and spread
+baaab    baaab    baaab
+^         ^         ^
+
+class Solution {
+    public String longestPalindrome(String s) {
+        String st = "";
+        int len = s.length();
+        int mlen = 0;
+        for(int i = 0;i<len;i++){
+            int l = i;
+            int r = i;                                                     //for odd cases
+            while(l>=0 && r<len && s.charAt(l) == s.charAt(r)){
+                if(r-l+1 > mlen){
+                    mlen = r-l+1;
+                    st = s.substring(l,r+1);                               //r+1 is used else substring would miss last element
+                }
+                l--;
+                r++;
+            }
+            l = i;
+            r = i+1;                                                      //for even cases as we put i+1
+            while(l>=0 && r<len && s.charAt(l) == s.charAt(r)){
+                if(r-l+1 > mlen){
+                    mlen = r-l+1;
+                    st = s.substring(l,r+1);
+                }
+                l--;
+                r++;
+            }
+        }
+        return st;
+    }
+}
