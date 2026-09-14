@@ -1,0 +1,70 @@
+//no particular way of thinking
+
+0_______________12_____________________24
+1__________11__13_________________23__25------------------------for this row after 1 the next element would be 1 + 2*numRows - 2 - 2*row(here 1)
+2_______10_____14_____________22______26------------------------for this row after 2 the next element would be 2 + 2*numRows - 2 - 2*row(here 2)
+3_____9_________15_________21_________27
+4___8___________16_____20_____________28
+5_7_____________17_19_________________29
+6_______________18_____________________30
+
+
+
+class Solution {
+    public String convert(String s, int numRows) {
+        String st = "";
+        int len = s.length();
+        if(numRows == 1){
+            return s;
+        }
+        for(int i = 0;i<numRows;i++){
+            int k = i;
+            if(k==0 || k == numRows-1){              //no diagonal elements for top and last row
+                while(k<len){
+                    st += s.charAt(k);
+                    k += 2*numRows - 2;
+                }
+            }
+            else{
+                int r = k;
+                while(k<len){
+                    st += s.charAt(k);
+                    if((k + 2*numRows - 2 - 2*r) < len){
+                        st += s.charAt(k + 2*numRows - 2 - 2*r);
+                    }
+                    k += 2*numRows - 2;
+                }
+            }
+        }
+        return st;
+    }
+}
+
+//faster method reduce calculations by storing them in variable and use arrays and its indexes rather than using charAt
+
+class Solution {
+    public String convert(String s, int numRows) {
+        int n = s.length();
+        if (numRows == 1 || numRows >= n) {
+            return s;
+        }
+
+        char[] src = s.toCharArray();
+        char[] res = new char[n];
+        int idx = 0;
+        int cycle = 2 * numRows - 2;
+
+        for (int i = 0; i < numRows; i++) {
+            for (int k = i; k < n; k += cycle) {
+                res[idx++] = src[k];
+
+                int diag = k + cycle - 2 * i;
+                if (i > 0 && i < numRows - 1 && diag < n) {
+                    res[idx++] = src[diag];
+                }
+            }
+        }
+
+        return new String(res);
+    }
+}
