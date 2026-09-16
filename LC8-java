@@ -1,0 +1,49 @@
+//lots of edge cases
+
+class Solution {
+     public int myAtoi(String s) {
+        int len = s.length();
+        int num = 0;
+        boolean pos = true;
+        boolean signdecided = false;        //in case string is "+-12"
+        int i = 0;
+        if(len == 0){                      //in case string is ""
+            return 0;
+        }
+        while(i<len && s.charAt(i) == ' '){
+            i++;
+        }
+        if(i<len && s.charAt(i) == '-'){
+            if(signdecided){
+                return 0;
+            }
+            signdecided = true;
+            pos = false;
+            i++;
+        }
+        if(i<len && s.charAt(i) == '+'){
+            if(signdecided){
+                return 0;
+            }
+            signdecided = true;
+            i++;
+        }
+        while( i < len && Character.isDigit(s.charAt(i))){
+            int n = s.charAt(i) - '0';
+                                                                                                    //can also use if declared num as long
+            if(num > Integer.MAX_VALUE/10 || (num == Integer.MAX_VALUE/10 && n > 7)){               // if(num>Integer.MAX_VALUE){
+                return (pos)?Integer.MAX_VALUE:Integer.MIN_VALUE;                                   //   return (pos)?Integer.MAX_VALUE:Integer.MIN_VALUE;           
+            }                                                                                       // }
+                                                                                          //num > Integer.MAX_VALUE/10 prevents overflow as num*10 later would cause overflow     
+                                                                                          //(num == Integer.MAX_VALUE/10 && n > 7) is used as we declared num as int
+            num = num*10 + n;                                                             //it prevents overflow just before it could happen speciifically for 214748364x
+            i++;                                                                          //where x>7 as only the last digit differs from max int
+        }
+        if(!pos){
+            num*=-1;
+        }
+        
+
+        return (int)num;
+    }
+}
