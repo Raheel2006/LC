@@ -1,0 +1,45 @@
+//initial thought to reverse and check while preventing overflow
+
+class Solution {
+    public boolean isPalindrome(int x) {
+        if(x<0){
+            return false;
+        }
+        int rev = 0;
+        int dup = x;
+        while(dup>0){
+            int l = dup%10;
+
+            if(rev > Integer.MAX_VALUE/10 || (rev == Integer.MIN_VALUE/10 && l>7)){
+                return false;
+            }
+
+            rev = rev*10 + l;
+            dup/=10;
+        }
+
+        if(rev == x){
+            return true;
+        }
+
+        return false;
+    }
+}
+
+//optimised version only checks whether first half of number is equal to reversed second half
+
+class Solution {                                            //eg2:12321 - x becomes 12 and rev becomes 123
+    public boolean isPalindrome(int x) {                    //eg1:1221 - x becomes 12 and rev also becomes 12
+        if(x<0 || (x%10 == 0 && x!=0)){                    //reject -ve and numbers ending with 0 except 0 itself
+            return false;
+        }
+        int rev = 0;
+        while(x>rev){
+            int l = x%10;
+            rev = rev*10 + l;
+            x/=10;
+        }
+
+        return (x==rev) || (x==rev/10); //<-- where length of number is odd rev/10 removes 3 from 123 in eg2
+    }            //^for even cases where length of number is equally divided
+}
