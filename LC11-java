@@ -1,0 +1,24 @@
+//thought of using l and r pointers if arr[l] was less than arr[r] i would move l forward and if inverse than move r backward while l<r
+
+class Solution {
+    public int maxArea(int[] height) {
+        int max = 0;
+        int l = 0;
+        int r = height.length - 1;
+        int curr = 0;
+        while(l<r){
+            curr = Math.min(height[l],height[r])*(r-l);
+            if(curr>max){
+                max = curr;
+            }
+
+            if(height[l] < height[r]){
+                l++;
+            }
+            else{
+                r--;
+            }
+        }
+        return max;
+    }
+}
